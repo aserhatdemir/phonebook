@@ -192,6 +192,33 @@ class DBStore(Store):
 #         return max_id
 
 
+class BothStore(Store):
+
+    def __init__(self, _file_store, _db_store):
+        self.file_store = _file_store
+        self.db_store = _db_store
+
+    def save_contact(self, _first_name, _surname, _email, _phone):
+        self.file_store.save_contact(_first_name, _surname, _email, _phone)
+        self.db_store.save_contact(_first_name, _surname, _email, _phone)
+
+    def delete_contact(self, _idx):
+        self.file_store.delete_contact(_idx)
+
+    def update_contact(self, _idx):
+        pass
+
+    def find_contact(self, search_key):
+        self.db_store.find_contact(search_key)
+
+    def print_all_contacts(self):
+        self.db_store.print_all_contacts()
+
+    def quit(self):
+        self.file_store.quit()
+        self.db_store.quit()
+
+
 class UserInput:
 
     def __init__(self):
@@ -251,15 +278,16 @@ class UserInput:
 
 def main():
     parser = argparse.ArgumentParser(description='This is a phonebook application')
-    parser.add_argument("--s",
-                        choices=["file", "database"],
-                        required=True, type=str, help="This is the store type")
+    parser.add_argument('--s',
+                        choices=['file', 'database', 'both'],
+                        required=True, type=str, help='This is the store type')
     args = parser.parse_args()
     store_type = args.s
 
-    db_store = DBStore()
     file_store = FileStore()
-    store_dict = {'file': file_store, 'database': db_store}
+    db_store = DBStore()
+    both_store = BothStore(file_store, db_store)
+    store_dict = {'file': file_store, 'database': db_store, 'both': both_store}
     my_store = store_dict[store_type]
 
     user_input = UserInput()
