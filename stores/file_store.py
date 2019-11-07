@@ -46,19 +46,34 @@ class FileStore(Store):
         print('----------------------')
 
     # Inherited methods
-    def save_contact(self, _first_name, _surname, _email, _phone):
+    def save_contact(self, name=None, surname=None, email=None, phone=None):
         if len(self.contacts) > 0:
             self.max_id = self.get_max_id()
+        contact = {'id': self.max_id + 1, 'name': name, 'surname': surname, 'email': email, 'phone': phone}
         self.contacts.append(
-            {'id': self.max_id + 1, 'name': _first_name, 'surname': _surname, 'email': _email, 'phone': _phone})
+            contact)
         self.save_to_file()
+        return contact
 
-    def delete_contact(self, _idx):
-        self.contacts.pop(_idx)
+    def delete_contact(self, idx):
+        con = self.find_contact_by_id(idx)
+        if con:
+            self.contacts.remove(con)
+            self.save_to_file()
+        return con
+
+    def find_contact_by_id(self, _idx):
+        for c in self.contacts:
+            if c['id'] == _idx:
+                return c
+        return None
+
+    def update_contact(self, contact):
+        con = self.find_contact_by_id(contact['id'])
+        for attr, val in contact.items():
+            con[attr] = val
         self.save_to_file()
-
-    def update_contact(self, _idx):
-        pass
+        return con
 
     def find_contact(self, search_key):
         order = []
@@ -75,8 +90,11 @@ class FileStore(Store):
             print('No contact found!!')
             return
         order.sort(reverse=True)
+        result = []
         for o in order:
             self.print_contact(self.contacts[o[1]])
+            result.append(self.contacts[o[1]])
+        return result
 
     def print_all_contacts(self):
         for c in self.contacts:

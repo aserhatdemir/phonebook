@@ -19,4 +19,6 @@ class Store:
     def quit(self):
         pass
 
+    def find_contact_by_id(self, _idx):
+        pass
 
