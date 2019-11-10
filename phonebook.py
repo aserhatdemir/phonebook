@@ -44,12 +44,12 @@ class UserInput:
                 print('invalid option!\n')
 
     def add_contact(self):
-        first_name = input('type name of the contact: ')
+        name = input('type name of the contact: ')
         surname = input('type surname of the contact: ')
         email = input('type email address of the contact: ')
         phone = input('type phone number of the contact: ')
 
-        self.my_store.save_contact(first_name, surname, email, phone)
+        self.my_store.save_contact(name, surname, email, phone)
 
     def print_all_contacts(self):
         self.my_store.print_all_contacts()

@@ -3,13 +3,16 @@ import json
 from flask import Flask, request
 from flask import abort
 
-from stores.file_store import FileStore
+# from stores.file_store import FileStore
+from stores.db_store import DBStore
 from stores.store_factory import store_factory_instance
 
 app = Flask(__name__)
 
-store_factory_instance.register_store('file', FileStore)
-store = store_factory_instance.create_store('file')
+# store_factory_instance.register_store('file', FileStore)
+# store = store_factory_instance.create_store('file')
+store_factory_instance.register_store('db', DBStore)
+store = store_factory_instance.create_store('db')
 
 
 @app.route('/hello')
