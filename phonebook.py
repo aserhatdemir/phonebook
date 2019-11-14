@@ -3,6 +3,7 @@ import argparse
 from stores.both_store import BothStore
 from stores.db_store import DBStore
 from stores.file_store import FileStore
+from stores.firestore import FireStore
 from stores.store_factory import store_factory_instance
 
 
@@ -10,6 +11,7 @@ def boot_strap():
     store_factory_instance.register_store('both', BothStore)
     store_factory_instance.register_store('file', FileStore)
     store_factory_instance.register_store('db', DBStore)
+    store_factory_instance.register_store('firestore', FireStore)
 
 
 class UserInput:

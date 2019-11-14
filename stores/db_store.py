@@ -52,6 +52,7 @@ class DBStore(Store):
         return self.find_contact_by_id(inserted_id)
 
     def delete_contact(self, idx):
+        idx = int(idx)
         record_to_delete = self.find_contact_by_id(idx)
         postgres_delete_query = """ DELETE FROM contacts WHERE id = %s"""
         id_to_delete = [idx]
@@ -62,12 +63,13 @@ class DBStore(Store):
     def update_contact(self, contact):
         print(contact)
         postgres_update_query = """ UPDATE contacts SET NAME = %s, SURNAME = %s, EMAIL = %s, PHONE = %s WHERE ID = %s"""
-        record_to_update = (contact['name'], contact['surname'], contact['email'], contact['phone'], contact['id'])
+        record_to_update = (contact['name'], contact['surname'], contact['email'], contact['phone'], int(contact['id']))
         self.cursor.execute(postgres_update_query, record_to_update)
         self.connection.commit()
         return self.find_contact_by_id(contact['id'])
 
     def find_contact_by_id(self, idx):
+        idx = int(idx)
         postgres_select_query = """ SELECT * FROM contacts WHERE id = %s"""
         id_to_find = [idx]
         self.cursor.execute(postgres_select_query, id_to_find)
