@@ -5,12 +5,6 @@ from stores.store import Store
 
 class DBStore(Store):
 
-    # # singleton
-    # def __new__(cls):
-    #     if not hasattr(cls, 'instance'):
-    #         cls.instance = super().__new__(cls)
-    #     return cls.instance
-
     def __init__(self):
         self.contacts = []
         self.connection = None
@@ -109,8 +103,14 @@ class DBStore(Store):
         postgres_select_query = 'SELECT * FROM contacts'
         self.cursor.execute(postgres_select_query)
         contacts_records = self.cursor.fetchall()
-        for row in contacts_records:
-            self.print_contact(row)
+        if len(contacts_records) == 0:
+            return None
+        contacts_view = []
+        for rec in contacts_records:
+            self.print_contact(rec)
+            contacts_view.append({'id': rec[4], 'name': rec[0],
+                                  'surname': rec[1], 'phone': rec[3], 'email': rec[2]})
+        return contacts_view
 
     def quit(self):
         self.disconnect_from_db()

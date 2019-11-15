@@ -4,7 +4,7 @@ from flask import Flask, request
 from flask import abort
 
 # from stores.file_store import FileStore
-# from stores.db_store import DBStore
+from stores.db_store import DBStore
 from stores.firestore import FireStore
 from stores.store_factory import store_factory_instance
 
@@ -12,8 +12,10 @@ app = Flask(__name__)
 
 # store_factory_instance.register_store('file', FileStore)
 # store = store_factory_instance.create_store('file')
+
 # store_factory_instance.register_store('db', DBStore)
 # store = store_factory_instance.create_store('db')
+
 store_factory_instance.register_store('firestore', FireStore)
 store = store_factory_instance.create_store('firestore')
 
@@ -27,7 +29,7 @@ def hello():
 def list_contacts():
     result = store.print_all_contacts()
     if result:
-        return result
+        return json.dumps(result, indent=4, sort_keys=True)
     abort(404)
 
 
@@ -75,7 +77,7 @@ def find_contact():
     abort(404)
 
 
-# GET /contact -> read all contacts
+# GET /contacts -> read all contacts
 # GET /contact/3 -> read contact with id 3
 # GET /contact/?q=ser -> search start with ser
 # POST /contact/3 -> write contact with id=3, contact content given in the body

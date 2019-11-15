@@ -71,6 +71,8 @@ class FireStore(Store):
         return None
 
     def find_contact(self, search_key):
+        if search_key is None:
+            return None
         key_limit = self.find_key_limit(search_key)
         found_contacts = {}
         order = {}
