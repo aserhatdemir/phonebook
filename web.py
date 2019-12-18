@@ -4,8 +4,11 @@ from flask import Flask, request
 from flask import abort
 
 # from stores.file_store import FileStore
-from stores.db_store import DBStore
-from stores.firestore import FireStore
+# from stores.db_store import DBStore
+# from stores.firestore import FireStore
+from stores.es_store import ESStore
+
+
 from stores.store_factory import store_factory_instance
 
 app = Flask(__name__)
@@ -16,8 +19,11 @@ app = Flask(__name__)
 # store_factory_instance.register_store('db', DBStore)
 # store = store_factory_instance.create_store('db')
 
-store_factory_instance.register_store('firestore', FireStore)
-store = store_factory_instance.create_store('firestore')
+# store_factory_instance.register_store('firestore', FireStore)
+# store = store_factory_instance.create_store('firestore')
+
+store_factory_instance.register_store('es_store', ESStore)
+store = store_factory_instance.create_store('es_store')
 
 
 @app.route('/hello')

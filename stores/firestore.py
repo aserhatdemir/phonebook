@@ -10,10 +10,10 @@ class FireStore(Store):
         self.db = None
         self.contacts_ref = None
         self.fields = ['name', 'surname', 'email', 'phone']
-        self.connect_to_firestore()
+        self._connect_to_firestore()
 
     # Class specific methods
-    def connect_to_firestore(self):
+    def _connect_to_firestore(self):
         self.db = firestore.Client.from_service_account_json('/Users/serhat/PycharmProjects/'
                                                         'python-firestore-cfaa14f93b17.json')
 
@@ -22,11 +22,11 @@ class FireStore(Store):
         except google.cloud.exceptions.NotFound:
             print('Could not connect to Firestore!!')
 
-    def print_contact(self, cont):
+    def _print_contact(self, cont):
         pass
 
-    # increment the last character of string with 1
-    def find_key_limit(self, search_key):
+    # increment the last character of string with 1 for search limit
+    def _find_key_limit(self, search_key):
         str_len = len(search_key)
         last_char = search_key[str_len - 1]
         x = chr(ord(last_char) + 1)
@@ -73,7 +73,7 @@ class FireStore(Store):
     def find_contact(self, search_key):
         if search_key is None:
             return None
-        key_limit = self.find_key_limit(search_key)
+        key_limit = self._find_key_limit(search_key)
         found_contacts = {}
         order = {}
         # search for each field and increment document id value with 1 for each match
@@ -104,6 +104,7 @@ class FireStore(Store):
 
     def print_all_contacts(self):
         docs = self.contacts_ref.stream()
+        # display with ID
         contacts_view = {}
         for doc in docs:
             contacts_view[doc.id] = doc.to_dict()
